@@ -2,7 +2,7 @@ use std::fs::Metadata;
 use std::os::unix::fs::MetadataExt;
 
 /// Converts a file's mode into a `ls -l` style permission string.
-pub fn to_permission_string(metadata: &Metadata) -> String {
+pub fn display_permissions(metadata: &Metadata) -> String {
     let mode = metadata.mode();
     let file_type = match mode & libc::S_IFMT {
         libc::S_IFREG => '-',
