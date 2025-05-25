@@ -26,13 +26,17 @@ fn main() -> std::io::Result<()> {
 
 Add this to your Cargo.toml:
 
+```tolm
 [dependencies]
 unix_perms = "0.1.0"
+```
+
+or you can directly use cargo
+
+```bash
+cargo install unix_perms
+```
 
 ## 📄 License
 
-Licensed under either of:
-
-    MIT License (LICENSE-MIT or https://opensource.org/licenses/MIT)
-
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
