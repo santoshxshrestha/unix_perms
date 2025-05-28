@@ -10,6 +10,8 @@ A lightweight Rust library for displaying Unix-style file permissions like `-rwx
 
 ## 🔧 Example
 
+### display_permissions
+
 ```rust
 use unix_perms::display_permissions;
 use std::fs::metadata;
@@ -19,6 +21,36 @@ fn main() -> std::io::Result<()> {
     let mode_str = display_permissions(&meta);
     println!("{}", mode_str); // Output: -rw-r--r--
     Ok(())
+}
+```
+
+### get_owner_and_group
+
+```rust
+use std::fs;
+use unix_perms::get_owner_and_group;
+
+fn main() {
+    let path = ".";
+
+    if let Ok(entries) = fs::read_dir(path) {
+        for entry in entries.flatten() {
+            let file_name = entry.file_name().into_string().unwrap_or("???".to_string());
+            let (owner, group) = get_owner_and_group(entry);
+            println!("{:<20} owner: {:<10} group: {}", file_name, owner, group);
+        }
+    }
+}
+```
+
+### get_name
+
+```rust
+use unix_perms::get_name;
+fn main() {
+    let id = 0;
+    let name = get_name(id);
+    println!("{}", name); //Output: root
 }
 ```
 
