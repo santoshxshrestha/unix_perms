@@ -1,6 +1,6 @@
 use libc::{getpwuid, uid_t};
 use std::ffi::CStr;
-use std::fs::Metadata;
+use std::fs::{DirEntry, Metadata};
 use std::os::unix::fs::MetadataExt;
 
 /// Converts a file's mode into a `ls -l` style permission string.
@@ -39,8 +39,9 @@ pub fn display_permissions(metadata: &Metadata) -> String {
     perm_string
 }
 
-pub fn get_name(uid: u32) -> String {
-    let p = unsafe { getpwuid(uid as uid_t) };
+// Converts the id to name
+pub fn get_name(id: u32) -> String {
+    let p = unsafe { getpwuid(id as uid_t) };
 
     if p.is_null() {
         return "_".to_string();
@@ -49,4 +50,17 @@ pub fn get_name(uid: u32) -> String {
     let username = unsafe { CStr::from_ptr((*p).pw_name) };
 
     username.to_str().unwrap_or("_").to_string()
+}
+
+// Gets the name of the owner and group by the use of the id
+pub fn get_owner_and_group(file: DirEntry) -> (String, String) {
+    if let Ok(metadata) = file.metadata() {
+        let uid = metadata.uid();
+        let gid = metadata.gid();
+        let owner = get_name(uid);
+        let group = get_name(gid);
+        (owner, group)
+    } else {
+        ("_".to_string(), "_".to_string())
+    }
 }
