@@ -1,6 +1,6 @@
 [package]
 name = "unix_perms"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2024"
 authors = ["Santosh Shrestha <santoshxshrestha@gmail.com> "]
 description = "Converts Unix file mode metadata into symbolic rwx strings, emulating the output of the ls -l command. Ideal for Rust-based system tools or file inspection utilities."
