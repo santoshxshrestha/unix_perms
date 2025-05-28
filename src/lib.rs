@@ -1,3 +1,5 @@
+use libc::{getpwuid, uid_t};
+use std::ffi::CStr;
 use std::fs::Metadata;
 use std::os::unix::fs::MetadataExt;
 
@@ -19,9 +21,15 @@ pub fn display_permissions(metadata: &Metadata) -> String {
     perm_string.push(file_type);
 
     let permission_bits = [
-        (libc::S_IRUSR, 'r'), (libc::S_IWUSR, 'w'), (libc::S_IXUSR, 'x'),
-        (libc::S_IRGRP, 'r'), (libc::S_IWGRP, 'w'), (libc::S_IXGRP, 'x'),
-        (libc::S_IROTH, 'r'), (libc::S_IWOTH, 'w'), (libc::S_IXOTH, 'x'),
+        (libc::S_IRUSR, 'r'),
+        (libc::S_IWUSR, 'w'),
+        (libc::S_IXUSR, 'x'),
+        (libc::S_IRGRP, 'r'),
+        (libc::S_IWGRP, 'w'),
+        (libc::S_IXGRP, 'x'),
+        (libc::S_IROTH, 'r'),
+        (libc::S_IWOTH, 'w'),
+        (libc::S_IXOTH, 'x'),
     ];
 
     for (bit, chr) in permission_bits.iter() {
@@ -31,3 +39,14 @@ pub fn display_permissions(metadata: &Metadata) -> String {
     perm_string
 }
 
+pub fn get_name(uid: u32) -> String {
+    let p = unsafe { getpwuid(uid as uid_t) };
+
+    if p.is_null() {
+        return "_".to_string();
+    }
+
+    let username = unsafe { CStr::from_ptr((*p).pw_name) };
+
+    username.to_str().unwrap_or("_").to_string()
+}
