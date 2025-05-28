@@ -43,6 +43,17 @@ fn main() {
 }
 ```
 
+### get_name
+
+```rust
+use unix_perms::get_name;
+fn main() {
+    let id = 0;
+    let name = get_name(id);
+    println!("{}", name); //Output: root
+}
+```
+
 ## 📦 Installation
 
 Add this to your Cargo.toml:
